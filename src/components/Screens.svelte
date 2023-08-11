@@ -2,7 +2,6 @@
   export let height: number;
   export let width: number;
   export let first: boolean;
-  export let fullWidth: boolean;
 </script>
 
 <div
@@ -12,14 +11,14 @@
 
 <style>
   .first {
-    background-color: blue;
-    opacity: 0.75;
-    border: 4px solid blue;
+    background-color: rgb(71, 71, 244);
+    opacity: 0.4;
+    border: 4px solid rgb(28, 28, 131);
   }
 
   .second {
-    background-color: green;
-    opacity: 0.75;
-    border: 2px solid green;
+    background-color: rgb(15, 173, 15);
+    opacity: 0.4;
+    border: 4px solid rgb(12, 60, 12);
   }
 </style>
