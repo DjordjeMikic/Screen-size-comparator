@@ -1,121 +1,139 @@
-<script lang="ts">  
-  import { beforeUpdate } from 'svelte';
+<script lang="ts">
+  import { beforeUpdate } from "svelte";
 
-  import ScreenRatio from './components/ScreenRatio.svelte';
-  import ScreenSize from './components/ScreenSize.svelte';
-  import Screens from './components/Screens.svelte';
+  import ScreenRatio from "./components/ScreenRatio.svelte";
+  import ScreenSize from "./components/ScreenSize.svelte";
+  import Screens from "./components/Screens.svelte";
 
-  import { possibleRations } from './constants';
-
-  import { calculateSideOfScreen } from './helpers';
-  import type { Ratios } from './types';
+  import { possibleRations } from "./constants";
+  import type { Ratios } from "./types";
+  import { calculateSideOfScreen } from "./helpers";
   import "./app.css";
-  
-  let screenSize1 = 32;
-  let screenSize2 = 27;
-  let inches1: boolean = true;
-  let inches2: boolean = true;
-  
-  let size1ToCm = screenSize1 * 2.55;
-  let size2ToCm = screenSize2 * 2.55;
 
-  let ratios1: Ratios = { height: 9, width: 16 };
-  let ratios2: Ratios = { height: 9, width: 16 };
+  let screenSizeFirst: number = 32;
+  let screenSizeSecond: number = 27;
+  let isInchesFirst: boolean = true;
+  let isInchesSecond: boolean = true;
 
-  let screenDimensions1: Ratios = { height: 0, width: 0 };
-  let screenDimensions2: Ratios = { height: 0, width: 0 };
-  
-  let percent = (inches1 && screenSize1 < 37) && (inches2 && screenSize2 < 37) ? 10 : 5;
-  
-  const changeSize1 = (e) => {
+  let firstScreenSizeToCm: number = screenSizeFirst * 2.55;
+  let secondScreenSizeToCm: number = screenSizeSecond * 2.55;
+
+  let firstScreenRatios: Ratios = { height: 9, width: 16 };
+  let secondScreenRatios: Ratios = { height: 9, width: 16 };
+
+  let screenDimensionsFirst: Ratios = { height: 0, width: 0 };
+  let screenDimensionsSecond: Ratios = { height: 0, width: 0 };
+
+  $: percent = isInchesFirst && screenSizeFirst < 37 && isInchesSecond && screenSizeSecond < 37 ? 10 : 5;
+
+  // Change screens size
+  const changeSizeFirstScreen = (e) => {
     const num = parseInt(e.target.value);
-    screenSize1 = num;
-    size1ToCm = inches1 ? num * 2.55 : num;
-  }
-  
-  const changeSize2 = (e) => {
-    const num = parseInt(e.target.value);
-    screenSize2 = num;
-    size2ToCm = inches2 ? num * 2.55 : num;
-  }
-
-  const onChangeInches1 = (e) => { 
-    inches1 = e.target.checked;
-    size1ToCm = inches1 ? size1ToCm * 2.55 : screenSize1;
+    screenSizeFirst = num;
+    firstScreenSizeToCm = isInchesFirst ? num * 2.55 : num;
   };
 
-  const onChangeInches2 = (e) => {
-    inches2 = e.target.checked;
-    size2ToCm = inches2 ? size2ToCm * 2.55 : screenSize2;
+  const changeSizeSecondScreen = (e) => {
+    const num = parseInt(e.target.value);
+    screenSizeSecond = num;
+    secondScreenSizeToCm = isInchesSecond ? num * 2.55 : num;
   };
-  
-  const setRatio1 = (e) => {
-    const arr = e.target.value.split(',').map(Number);
-    ratios1 = { height: arr[1], width: arr[0] };
 
-    const calculateSide = calculateSideOfScreen(ratios1, size1ToCm);
-    screenDimensions1 = { height: calculateSide('height'), width: calculateSide('width') };
-  }
+  // Select measure type (inches or cm)
+  const onChangeInchesFirstScreen = (e) => {
+    isInchesFirst = e.target.checked;
+    firstScreenSizeToCm = isInchesFirst ? firstScreenSizeToCm * 2.55 : screenSizeFirst;
+  };
 
-  const setRatio2 = (e) => {
-    const arr = e.target.value.split(',').map(Number);
-    ratios2 = { height: arr[1], width: arr[0] };
-    
-    const calculateSide2 = calculateSideOfScreen(ratios2, size2ToCm);
-    screenDimensions2 = { height: calculateSide2('height'), width: calculateSide2('width') };
-  }
+  const onChangeInchesSecondScreen = (e) => {
+    isInchesSecond = e.target.checked;
+    secondScreenSizeToCm = isInchesSecond ? secondScreenSizeToCm * 2.55 : screenSizeSecond;
+  };
+
+  // Calculate dimensions of the sides
+  const calculateDimensionsOnFirstScreen = () => {
+    const calculateSide = calculateSideOfScreen(firstScreenRatios, firstScreenSizeToCm);
+    screenDimensionsFirst = {
+      height: calculateSide("height"),
+      width: calculateSide("width"),
+    };
+  };
+
+  const calculateDimensionsOnSecondScreen = () => {
+    const calculateSide2 = calculateSideOfScreen(secondScreenRatios, secondScreenSizeToCm);
+    screenDimensionsSecond = {
+      height: calculateSide2("height"),
+      width: calculateSide2("width"),
+    };
+  };
+
+  // Change Screen Ratios
+  const setFirstScreenRatio = (e) => {
+    const arr = e.target.value.split(",").map(Number);
+    firstScreenRatios = { height: arr[1], width: arr[0] };
+    calculateDimensionsOnFirstScreen();
+  };
+
+  const setSecondScreenRatio = (e) => {
+    const arr = e.target.value.split(",").map(Number);
+    secondScreenRatios = { height: arr[1], width: arr[0] };
+    calculateDimensionsOnSecondScreen();
+  };
 
   beforeUpdate(() => {
-    const calculateSide = calculateSideOfScreen(ratios1, size1ToCm);
-    screenDimensions1 = { height: calculateSide('height'), width: calculateSide('width') };
-
-    const calculateSide2 = calculateSideOfScreen(ratios2, size2ToCm);
-    screenDimensions2 = { height: calculateSide2('height'), width: calculateSide2('width') };
-
-    percent = (inches1 && screenSize1 < 37) && (inches2 && screenSize2 < 37) ? 10 : 5;
-  })
+    calculateDimensionsOnFirstScreen();
+    calculateDimensionsOnSecondScreen();
+  });
 </script>
 
-<main class="h-screen w-screen flex items-center justify-start flex-col gap-9 p-4 bg-slate-800">
+<main
+  class="h-screen w-screen flex items-center justify-start flex-col gap-9 p-4 bg-slate-800"
+>
   <h1 class="text-3xl font-bold text-white">Screen ratio</h1>
 
   <div class="w-3/5 flex items-center justify-center gap-6">
     <div class="w-3/5">
-      <ScreenRatio infoLabel="Display 1" options={possibleRations} ratio={0} setRatio={setRatio1} />
+      <ScreenRatio
+        infoLabel="Display 1"
+        options={possibleRations}
+        setRatio={setFirstScreenRatio}
+      />
 
       <ScreenSize
         no={1}
-        screenSize={screenSize1}
-        changeSize={changeSize1}
-        inches={inches1}
-        onChange={onChangeInches1}
+        screenSize={screenSizeFirst}
+        changeSize={changeSizeFirstScreen}
+        inches={isInchesFirst}
+        onChange={onChangeInchesFirstScreen}
       />
     </div>
 
     <div class="w-3/5">
-      <ScreenRatio infoLabel="Display 2" options={possibleRations} ratio={0} setRatio={setRatio2} />
+      <ScreenRatio
+        infoLabel="Display 2"
+        options={possibleRations}
+        setRatio={setSecondScreenRatio}
+      />
 
       <ScreenSize
         no={2}
-        screenSize={screenSize2}
-        changeSize={changeSize2}
-        inches={inches2}
-        onChange={onChangeInches2}
+        screenSize={screenSizeSecond}
+        changeSize={changeSizeSecondScreen}
+        inches={isInchesSecond}
+        onChange={onChangeInchesSecondScreen}
       />
     </div>
   </div>
-  
+
   <div id="screen-container" class="h-4/5 w-3/5 relative">
     <Screens
       first
-      height={screenDimensions1.height * percent}
-      width={screenDimensions1.width * percent}
+      height={screenDimensionsFirst.height * percent}
+      width={screenDimensionsFirst.width * percent}
     />
     <Screens
-      first={false}
-      height={screenDimensions2.height * percent}
-      width={screenDimensions2.width * percent}
+      height={screenDimensionsSecond.height * percent}
+      width={screenDimensionsSecond.width * percent}
     />
   </div>
-
 </main>

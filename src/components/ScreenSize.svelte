@@ -10,12 +10,15 @@
 </script>
 
 <div>
-  <div class="w-full flex items-center justify-between">   
-    <label for={`size-${no}`} class="block my-2 font-medium text-white dark:text-white text-align-left">
-      Size    
+  <div class="w-full flex items-center justify-between">
+    <label
+      for={`size-${no}`}
+      class="block my-2 font-medium text-white dark:text-white text-align-left"
+    >
+      Size
     </label>
     <p class="block my-2 font-medium text-white dark:text-white text-align-left">
-      {!!inches ? "Inches" : "Cm"}
+      {inches ? "Inches" : "Cm"}
     </p>
   </div>
 
@@ -28,7 +31,7 @@
       bind:value={screenSize}
       on:change={changeSize}
     />
-    
-    <Switch no={no} checked={inches} change={onChange} />
+
+    <Switch {no} checked={inches} change={onChange} />
   </div>
 </div>

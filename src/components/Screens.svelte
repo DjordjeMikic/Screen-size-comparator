@@ -1,13 +1,14 @@
 <script lang="ts">
   export let height: number;
   export let width: number;
-  export let first: boolean;
+  export let first: boolean = false;
 </script>
 
 <div
-  class={`absolute bottom-0 left-0 ${first ? 'first' : 'second'}`}
+  class={`absolute bottom-0 left-0 ${first ? "first" : "second"}`}
   style={`height: ${height}px; width: ${width}px`}
-></div>
+  title={`${first ? 'First' : 'Second'} Screen`}
+/>
 
 <style>
   .first {

@@ -6,7 +6,7 @@
 
 <div class="w-20">
   <label for={`switch-${no}`} class={`label ${checked ? "on" : ""}`}>
-    <div class={`circle ${checked ? "right" : ""}`}></div>
+    <div class={`circle ${checked ? "right" : ""}`} />
   </label>
 
   <input
@@ -15,7 +15,7 @@
     class="switch"
     on:change={change}
     bind:value={checked}
-    bind:checked={checked}
+    bind:checked
   />
 </div>
 
@@ -42,7 +42,7 @@
 
   .circle {
     height: 31px;
-    width: 31px;    
+    width: 31px;
     border-radius: 50%;
     background-color: aliceblue;
     position: absolute;
