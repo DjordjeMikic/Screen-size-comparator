@@ -8,10 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "deploy": "yarn build && yarn gh-pages -d dist -t true"
+    "deploy": "yarn build && yarn gh-pages -d docs -t true"
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@tsconfig/svelte": "^5.0.0",
     "autoprefixer": "^10.4.14",
